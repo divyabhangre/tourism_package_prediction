@@ -1,0 +1,35 @@
+name: MLOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ml-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install -r tourism_project/requirements.txt
+
+      - name: 🏋️ Train & Evaluate Model
+        run: |
+          python tourism_project/model_building/model_building.py
+
+      - name: 🚀 Deploy to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "divyabhangre@gmail.com"
+          git config --global user.name "divyabhangre"
+          git push https://divyabhangre:$HF_TOKEN@huggingface.co/spaces/divyabhangre/tourism-package-predict main
