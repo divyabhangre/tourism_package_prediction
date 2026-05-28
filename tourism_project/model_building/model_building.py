@@ -1,3 +1,4 @@
+
 from datasets import load_dataset
 import pandas as pd
 import numpy as np
@@ -10,8 +11,19 @@ from xgboost import XGBClassifier
 from sklearn.metrics import (accuracy_score, precision_score,recall_score, f1_score)
 from huggingface_hub import HfApi
 import joblib
+
+
+# Set the tracking URL for MLflow
+mlflow.set_tracking_uri("https://emote-sibling-surrogate.ngrok-free.dev")
+
+# Set the name for the experiment
+mlflow.set_experiment("MLOps_CICD_experiment")
+
 # ── 1. Load train and test data from Hugging Face ──
 api = HfApi(token=os.getenv("HF_TOKEN"))
+
+# ── 1. Load train and test data from Hugging Face ──
+#api = HfApi(token=os.getenv("HF_TOKEN"))
 
 train_X = load_dataset("divyabhangre/tourism-pkg-prediction-data",data_files="Xtrain.csv", split="train").to_pandas()
 test_X  = load_dataset("divyabhangre/tourism-pkg-prediction-data",data_files="Xtest.csv",  split="train").to_pandas()
